@@ -33,6 +33,11 @@ func main() {
 		log.Fatal(err)
 	}
 
+	version, err := utils.GetEnv("PACKAGE_VERSION")
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	authorName, err := utils.GetEnv("GIT_AUTHOR_NAME")
 	if err != nil {
 		log.Fatal(err)
@@ -145,6 +150,7 @@ func main() {
 		conf := make(map[string][]string)
 		conf["org"] = []string{pack.Org}
 		conf["name"] = []string{pack.Name}
+		conf["version"] = []string{version}
 		conf["description"] = []string{c.Description}
 		conf["private"] = []string{strconv.FormatBool(pack.Private)}
 		conf["src_path"] = []string{pack.SrcPath}
