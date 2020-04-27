@@ -55,10 +55,6 @@ func (c *GithubRepository) Create(org, name string, private bool) error {
 		Private: &private,
 	}
 
-	if org == c.Config["username"] {
-		org = ""
-	}
-
 	_, _, err := c.Client.Repositories.Create(c.Context, org, &repo)
 	if err != nil {
 		return err
