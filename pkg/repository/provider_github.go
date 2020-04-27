@@ -38,11 +38,15 @@ func (c *GithubRepository) GetURL(owner, name string) string {
 func (c *GithubRepository) Exists(owner, name string) (bool, error) {
 	_, response, err := c.Client.Repositories.Get(c.Context, owner, name)
 
-	if response.Response.StatusCode != 200 && err != nil {
-		return false, err
+	if response.Response.StatusCode == 200 {
+		return true, nil
 	}
 
-	return true, nil
+	if response.Response.StatusCode == 404 {
+		return false, nil
+	}
+
+	return false, err
 }
 
 func (c *GithubRepository) Create(org, name string, private bool) error {
