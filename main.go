@@ -144,6 +144,10 @@ func main() {
 				log.Fatal(err)
 			}
 			log.Debugf("Changed directory (%s)", cwd())
+
+			if err := g.Open(); err != nil {
+				log.Fatal(err)
+			}
 		}
 
 		// Get files
