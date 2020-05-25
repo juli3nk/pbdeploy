@@ -68,7 +68,7 @@ func main() {
 		if err := os.Chdir(*dstPath); err != nil {
 			log.Fatal(err)
 		}
-		log.Debugf("Changed directory to %s", *dstPath)
+		log.Debugf("Changed directory to %s (%s)", *dstPath, cwd())
 
 		config := make(map[string]string)
 		config["username"] = c.Repository.Username
@@ -137,13 +137,13 @@ func main() {
 			if err = g.Clone(pack.Name); err != nil {
 				log.Fatal(err)
 			}
-			log.Debug("Cloned repository")
+			log.Debugf("Cloned repository '%s'", pack.Name)
 
 			// Change dir
 			if err := os.Chdir(pack.Name); err != nil {
 				log.Fatal(err)
 			}
-			log.Debug("Changed directory")
+			log.Debugf("Changed directory (%s)", cwd())
 		}
 
 		// Get files
@@ -191,6 +191,8 @@ func main() {
 		stagedCount := 0
 
 		for file, status := range statusFiles {
+			log.Debugf("%s => %v", file, status.Worktree)
+
 			if status.Worktree == gitv4.Untracked || status.Worktree == gitv4.Modified {
 				if err := g.Add(file); err != nil {
 					log.Fatal(err)
@@ -226,4 +228,10 @@ func main() {
 		}
 		log.Debug("Pushed to remote repository")
 	}
+}
+
+func cwd() string {
+	dir, _ := os.Getwd()
+
+	return dir
 }

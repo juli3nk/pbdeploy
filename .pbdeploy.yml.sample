@@ -1,0 +1,14 @@
+---
+description: 'iTriba service to manage devices'
+repository:
+  provider: github
+  username: juliengk
+packages:
+- type: go
+  name: itriba-device-pb-go
+  private: true
+  src_path: /tmp/pb/itriba-device-go/github.com/juliengk/itriba-device/
+- type: js
+  name: itriba-device-pb-web
+  private: true
+  src_path: /tmp/pb/itriba-device-web
