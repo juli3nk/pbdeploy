@@ -5,6 +5,7 @@ import (
 	"os"
 	"strconv"
 
+	gogit "github.com/go-git/go-git"
 	"github.com/juli3nk/go-git"
 	"github.com/juli3nk/go-utils"
 	"github.com/juli3nk/go-utils/filedir"
@@ -12,7 +13,6 @@ import (
 	pfile "github.com/juli3nk/pbdeploy/pkg/file"
 	"github.com/juli3nk/pbdeploy/pkg/repository"
 	log "github.com/sirupsen/logrus"
-	gitv4 "gopkg.in/src-d/go-git.v4"
 )
 
 var (
@@ -197,7 +197,7 @@ func main() {
 		for file, status := range statusFiles {
 			log.Debugf("%s => %v", file, status.Worktree)
 
-			if status.Worktree == gitv4.Untracked || status.Worktree == gitv4.Modified {
+			if status.Worktree == gogit.Untracked || status.Worktree == gogit.Modified {
 				if err := g.Add(file); err != nil {
 					log.Fatal(err)
 				}
@@ -205,7 +205,7 @@ func main() {
 
 				log.Debugf("Added file (%s) contents to the index", file)
 			}
-			if status.Worktree == gitv4.Deleted {
+			if status.Worktree == gogit.Deleted {
 				if err := g.Remove(file); err != nil {
 					log.Fatal(err)
 				}
