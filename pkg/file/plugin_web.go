@@ -45,7 +45,11 @@ func NewJsFiler(conf map[string][]string) (Filer, error) {
 	}
 	v, ok = conf["version"]
 	if ok {
-		pjf.Version = v[0]
+		if string(v[0][0]) == "v" {
+			pjf.Version = string(v[0][1:])
+		} else {
+			pjf.Version = v[0]
+		}
 	}
 	v, ok = conf["description"]
 	if ok {

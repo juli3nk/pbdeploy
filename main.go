@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"os"
 	"strconv"
 
@@ -36,6 +37,11 @@ func main() {
 	version, err := utils.GetEnv("PACKAGE_VERSION")
 	if err != nil {
 		log.Fatal(err)
+	}
+	log.Debugf("PACKAGE_VERSION = %s", version)
+
+	if string(version[0]) != "v" {
+		log.Fatalf("package version (%s) is not prefixed with a \"v\"", version)
 	}
 
 	authorName, err := utils.GetEnv("GIT_AUTHOR_NAME")
@@ -217,20 +223,33 @@ func main() {
 
 		if stagedCount == 0 {
 			log.Debug("No file(s) indexed")
-			continue
+		} else {
+			// git commit
+			if err = g.Commit(commitMsg); err != nil {
+				log.Fatal(err)
+			}
+			log.Debug("Recorded changes to the repository")
+
+			// git push commit
+			if err = g.Push("origin", "", false); err != nil {
+				log.Fatal(err)
+			}
+			log.Debug("Pushed to remote repository")
 		}
 
-		// git commit
-		if err = g.Commit(commitMsg); err != nil {
-			log.Fatal(err)
-		}
-		log.Debug("Recorded changes to the repository")
+		if pack.CreateTag {
+			// git tag
+			if err = g.CreateTag(version, fmt.Sprintf("Release %s", version)); err != nil {
+				log.Fatal(err)
+			}
+			log.Debugf("Created tag (%s)", version)
 
-		// git push
-		if err = g.Push("origin"); err != nil {
-			log.Fatal(err)
+			// git push tag
+			if err = g.Push("origin", version, false); err != nil {
+				log.Fatal(err)
+			}
+			log.Debug("Pushed tag to remote repository")
 		}
-		log.Debug("Pushed to remote repository")
 	}
 }
 

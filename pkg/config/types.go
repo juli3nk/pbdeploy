@@ -12,10 +12,11 @@ type Repository struct {
 }
 
 type Package struct {
-	Type    string              `yaml:"type"`
-	Org     string              `yaml:"org"`
-	Name    string              `yaml:"name"`
-	Private bool                `yaml:"private"`
-	SrcPath string              `yaml:"src_path"`
-	Options map[string][]string `yaml:"options"`
+	Type      string              `yaml:"type"`
+	Org       string              `yaml:"org"`
+	Name      string              `yaml:"name"`
+	Private   bool                `yaml:"private"`
+	SrcPath   string              `yaml:"src_path"`
+	CreateTag bool                `yaml:"create_tag,omitempty"`
+	Options   map[string][]string `yaml:"options,omitempty"`
 }
