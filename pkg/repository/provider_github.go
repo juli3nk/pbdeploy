@@ -51,7 +51,7 @@ func (c *GithubRepository) Exists(owner, name string) (bool, error) {
 
 func (c *GithubRepository) Create(org, name string, private bool) error {
 	repo := github.Repository{
-		Name: &name,
+		Name:    &name,
 		Private: &private,
 	}
 

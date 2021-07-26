@@ -14,6 +14,7 @@ type Repository struct {
 type Package struct {
 	Type      string              `yaml:"type"`
 	Org       string              `yaml:"org"`
+	Scope     string              `yaml:"scope,omitempty"`
 	Name      string              `yaml:"name"`
 	Private   bool                `yaml:"private"`
 	SrcPath   string              `yaml:"src_path"`
