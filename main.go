@@ -18,8 +18,8 @@ import (
 
 var (
 	configFile = flag.String("conf", ".pbdeploy.yml", "Path to config file")
-	debug = flag.Bool("debug", false, "Enable debug logging")
-	dstPath = flag.String("path", "/tmp/workspace", "Path where to clone git repositories")
+	debug      = flag.Bool("debug", false, "Enable debug logging")
+	dstPath    = flag.String("path", "/tmp/workspace", "Path where to clone git repositories")
 )
 
 func main() {
@@ -157,6 +157,7 @@ func main() {
 		// Get files
 		conf := make(map[string][]string)
 		conf["org"] = []string{pack.Org}
+		conf["scope"] = []string{pack.Scope}
 		conf["name"] = []string{pack.Name}
 		conf["version"] = []string{version}
 		conf["description"] = []string{c.Description}

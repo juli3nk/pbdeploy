@@ -21,18 +21,18 @@ type JSFiler struct {
 }
 
 type packageJsonFile struct {
-	Scope           string            `json:"scope,omitempty"`
-	Name            string            `json:"name"`
-	Version         string            `json:"version,omitempty"`
-	Description     string            `json:"description"`
-	Keywords        []string          `json:"keywords,omitempty"`
-	Homepage        string            `json:"homepage,omitempty"`
-	License         string            `json:"license,omitempty"`
-	Author          string            `json:"author,omitempty"`
-	Repository      string            `json:"repository,omitempty"`
+	Scope       string   `json:"scope,omitempty"`
+	Name        string   `json:"name"`
+	Version     string   `json:"version,omitempty"`
+	Description string   `json:"description"`
+	Keywords    []string `json:"keywords,omitempty"`
+	Homepage    string   `json:"homepage,omitempty"`
+	License     string   `json:"license,omitempty"`
+	Author      string   `json:"author,omitempty"`
+	Repository  string   `json:"repository,omitempty"`
 	//DevDependencies map[string]string `json:"devDependencies,omitempty"`
-	Private         *bool              `json:"private,omitempty"`
-	PublishConfig   map[string]string `json:"publishConfig,omitempty"`
+	Private       *bool             `json:"private,omitempty"`
+	PublishConfig map[string]string `json:"publishConfig,omitempty"`
 }
 
 func NewJsFiler(conf map[string][]string) (Filer, error) {
