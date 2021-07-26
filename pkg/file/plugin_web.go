@@ -96,9 +96,9 @@ func NewJsFiler(conf map[string][]string) (Filer, error) {
 		}
 		pjf.Private = &val
 	}
-	v, ok = conf["publishConfig"]
+	v, ok = conf["publish_config"]
 	if ok {
-		var r map[string]string
+		r := make(map[string]string)
 		for _, pc := range v {
 			c := strings.Split(pc, ";")
 
