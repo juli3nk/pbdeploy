@@ -59,14 +59,12 @@ func main() {
 		log.Fatal(err)
 	}
 
-	if filedir.DirExists(*dstPath) {
-		log.Fatalf("Destination directory %s exists", *dstPath)
+	if !filedir.DirExists(*dstPath) {
+		if err := filedir.CreateDirIfNotExist(*dstPath, true, 0775); err != nil {
+			log.Fatal(err)
+		}
+		log.Debugf("Created directory %s", *dstPath)
 	}
-
-	if err := filedir.CreateDirIfNotExist(*dstPath, true, 0775); err != nil {
-		log.Fatal(err)
-	}
-	log.Debugf("Created directory %s", *dstPath)
 
 	for _, pack := range c.Packages {
 		var commitMsg string
