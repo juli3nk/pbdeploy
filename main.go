@@ -235,20 +235,20 @@ func main() {
 				log.Fatal(err)
 			}
 			log.Debug("Pushed to remote repository")
-		}
 
-		if pack.CreateTag {
-			// git tag
-			if err = g.CreateTag(version, fmt.Sprintf("Release %s", version)); err != nil {
-				log.Fatal(err)
-			}
-			log.Debugf("Created tag (%s)", version)
+			if pack.CreateTag {
+				// git tag
+				if err = g.CreateTag(version, fmt.Sprintf("Release %s", version)); err != nil {
+					log.Fatal(err)
+				}
+				log.Debugf("Created tag (%s)", version)
 
-			// git push tag
-			if err = g.Push("origin", version, false); err != nil {
-				log.Fatal(err)
+				// git push tag
+				if err = g.Push("origin", version, false); err != nil {
+					log.Fatal(err)
+				}
+				log.Debug("Pushed tag to remote repository")
 			}
-			log.Debug("Pushed tag to remote repository")
 		}
 	}
 }
