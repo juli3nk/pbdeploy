@@ -3,9 +3,11 @@ package file
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"path"
 	"strconv"
+	"strings"
 	"text/template"
 )
 
@@ -19,6 +21,7 @@ type JSFiler struct {
 }
 
 type packageJsonFile struct {
+	Scope           string            `json:"scope,omitempty"`
 	Name            string            `json:"name"`
 	Version         string            `json:"version,omitempty"`
 	Description     string            `json:"description"`
@@ -28,7 +31,8 @@ type packageJsonFile struct {
 	Author          string            `json:"author,omitempty"`
 	Repository      string            `json:"repository,omitempty"`
 	//DevDependencies map[string]string `json:"devDependencies,omitempty"`
-	Private         bool              `json:"private,omitempty"`
+	Private         *bool              `json:"private,omitempty"`
+	PublishConfig   map[string]string `json:"publishConfig,omitempty"`
 }
 
 func NewJsFiler(conf map[string][]string) (Filer, error) {
@@ -39,10 +43,19 @@ func NewJsFiler(conf map[string][]string) (Filer, error) {
 
 	pjf := packageJsonFile{}
 
+	var name string
+	var repoName string
 	v, ok := conf["name"]
 	if ok {
-		pjf.Name = v[0]
+		name = v[0]
+		repoName = v[0]
 	}
+	v, ok = conf["scope"]
+	if ok {
+		name = fmt.Sprintf("@%s/%s", v[0], name)
+	}
+	pjf.Name = name
+
 	v, ok = conf["version"]
 	if ok {
 		if string(v[0][0]) == "v" {
@@ -81,7 +94,26 @@ func NewJsFiler(conf map[string][]string) (Filer, error) {
 		if err != nil {
 			return nil, err
 		}
-		pjf.Private = val
+		pjf.Private = &val
+	}
+	v, ok = conf["publishConfig"]
+	if ok {
+		var r map[string]string
+		for _, pc := range v {
+			c := strings.Split(pc, ";")
+
+			if len(c) > 0 {
+				k := c[0]
+				val := c[1]
+
+				r[k] = val
+			}
+		}
+
+		pjf.PublishConfig = r
+	}
+	if *pjf.Private && ok {
+		pjf.Private = nil
 	}
 
 	f.packageJsonFile = pjf
@@ -95,9 +127,9 @@ func NewJsFiler(conf map[string][]string) (Filer, error) {
 		dstPath = v[0]
 	}
 
-	dstPath = path.Join(dstPath, pjf.Name)
+	dstPath = path.Join(dstPath, repoName)
 
-	f.config = newFile(pjf.Name, pjf.Description, srcPath, dstPath)
+	f.config = newFile(repoName, pjf.Description, srcPath, dstPath)
 
 	return &f, nil
 }
