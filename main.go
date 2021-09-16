@@ -17,9 +17,10 @@ import (
 )
 
 var (
-	configFile = flag.String("conf", ".pbdeploy.yml", "Path to config file")
-	debug      = flag.Bool("debug", false, "Enable debug logging")
-	dstPath    = flag.String("path", "/tmp/workspace", "Path where to clone git repositories")
+	configFile  = flag.String("conf", ".pbdeploy.yml", "Path to config file")
+	debug       = flag.Bool("debug", false, "Enable debug logging")
+	dstPath     = flag.String("path", "/tmp/workspace", "Path where to clone git repositories")
+	checkGitTag = flag.Bool("check", false, "Check remote git tag version")
 )
 
 func main() {
@@ -223,6 +224,8 @@ func main() {
 		if stagedCount == 0 {
 			log.Debug("No file(s) indexed")
 		} else {
+			remoteName := "origin"
+
 			// git commit
 			if err = g.Commit(commitMsg); err != nil {
 				log.Fatal(err)
@@ -230,7 +233,7 @@ func main() {
 			log.Debug("Recorded changes to the repository")
 
 			// git push commit
-			if err = g.Push("origin", "", false); err != nil {
+			if err = g.Push(remoteName, "", false); err != nil {
 				log.Fatal(err)
 			}
 			log.Debug("Pushed to remote repository")
@@ -247,6 +250,24 @@ func main() {
 					log.Fatal(err)
 				}
 				log.Debug("Pushed tag to remote repository")
+
+				// check remote git tag version
+				if *checkGitTag {
+					if err := g.NewRemote(remoteName); err != nil {
+						log.Fatal(err)
+					}
+
+					refs, err := g.LsRemote()
+					if err != nil {
+						log.Fatal(err)
+					}
+
+					latestVersion := getLatestVersion(refs)
+
+					if version != latestVersion {
+						log.Fatal("the latest version of the package does not seem to be on the remote repository")
+					}
+				}
 			}
 		}
 	}
