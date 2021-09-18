@@ -1,9 +1,17 @@
 package main
 
 import (
+	"os"
+
 	"github.com/go-git/go-git/plumbing"
 	"github.com/hashicorp/go-version"
 )
+
+func cwd() string {
+	dir, _ := os.Getwd()
+
+	return dir
+}
 
 func getLatestVersion(refs []*plumbing.Reference) string {
 	var latestVersion *version.Version
