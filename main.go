@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"time"
 
 	gogit "github.com/go-git/go-git"
 	"github.com/juli3nk/go-git"
@@ -110,7 +111,9 @@ func main() {
 			if err := r.Create(pack.Org, pack.Name, true); err != nil {
 				log.Fatal(err)
 			}
-			log.Debugf("Created repository %s/%s", pack.Org, pack.Name)
+			log.Debugf("Created remote repository %s/%s", pack.Org, pack.Name)
+
+			time.Sleep(5 * time.Second)
 
 			// Create local directory
 			if err := filedir.CreateDirIfNotExist(pack.Name, false, 0775); err != nil {
@@ -271,10 +274,4 @@ func main() {
 			}
 		}
 	}
-}
-
-func cwd() string {
-	dir, _ := os.Getwd()
-
-	return dir
 }
