@@ -17,7 +17,6 @@ func getLatestVersion(refs []*plumbing.Reference) string {
 	var latestVersion *version.Version
 	var latestVersionStr string
 
-	i := 0
 	for _, ref := range refs {
 		if !ref.Name().IsTag() {
 			continue
@@ -25,7 +24,7 @@ func getLatestVersion(refs []*plumbing.Reference) string {
 
 		ver, _ := version.NewVersion(ref.Name().Short())
 
-		if i == 0 {
+		if latestVersion == nil {
 			latestVersion = ver
 			latestVersionStr = ref.Name().Short()
 			continue
@@ -35,8 +34,6 @@ func getLatestVersion(refs []*plumbing.Reference) string {
 			latestVersion = ver
 			latestVersionStr = ref.Name().Short()
 		}
-
-		i++
 	}
 
 	return latestVersionStr
