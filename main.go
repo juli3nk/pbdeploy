@@ -266,6 +266,7 @@ func main() {
 					}
 
 					latestVersion := getLatestVersion(refs)
+					log.Debugf("Remote latest tag is %s", latestVersion)
 
 					if version != latestVersion {
 						log.Fatal("the latest version of the package does not seem to be on the remote repository")

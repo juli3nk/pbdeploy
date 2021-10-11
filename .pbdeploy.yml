@@ -1,0 +1,15 @@
+---
+description: 'Itriba service to manage partners'
+repository:
+  provider: github
+  username: itriba-packages
+packages:
+- type: js
+  scope: itriba-packages
+  name: itriba-partner-pb-web
+  private: true
+  src_path: /tmp/protos/itriba-partner-pb-web
+  create_tag: true
+  options:
+    publish_config:
+    - "registry;https://npm.pkg.github.com"
